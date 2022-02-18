@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -69,6 +70,10 @@ func (p *parseVisitor) isWorld(addr core.Address) bool {
 		if c, ok := p.resources[idx].(program.Constant); ok {
 			if acc, ok := c.Inner.(core.Account); ok {
 				if string(acc) == "world" {
+					return true
+				}
+				match, _ := regexp.MatchString(`^payments:[a-zA-Z0-9_]+`, string(acc))
+				if match {
 					return true
 				}
 			}
